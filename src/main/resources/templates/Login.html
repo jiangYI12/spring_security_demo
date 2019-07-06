@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <form action="/login/user" method="post">
+            <input type="text" name="username" /><br/>
+            <input type="password" name="password"/><br/>
+            <input type="checkbox" name="remember-me" value="true"/> 记住我
+            <button type="submit">登陆</button>
+            <a HREF="/logout">退出</a>
+        </form>
+
+        短信登录:<form action="/authentication/mobile" method="post">
+        电话:<input type="input" name="mobile" value="13202361544">
+        验证码:<input type="input" name="code" value=""/>
+             <button type="submit">登陆</button>
+            <a HREF="/logout">退出</a>
+        发送验证码:<a href="/login/moble?phone='13202361544'"></a>
+    </form>
+    </div>
+</body>
+</html>
