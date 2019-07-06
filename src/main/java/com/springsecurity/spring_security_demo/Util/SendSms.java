@@ -19,7 +19,7 @@ public class SendSms {
     public void sendMsg(String phone,String code) {
         //将手机号验证码存入code 中
         redisUtil.save(phone,code);
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI2pHwBJ458ssK", "enMRuies7TkAoC6CkIkpIwUSrvZgn7");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "填自己的", "填自己的");
         IAcsClient client = new DefaultAcsClient(profile);
         CommonRequest request = new CommonRequest();
         request.setSysMethod(MethodType.POST);
