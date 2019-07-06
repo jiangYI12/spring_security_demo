@@ -1,9 +1,7 @@
 package com.springsecurity.spring_security_demo.Entity;
 
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
-@Data
 public class Role implements GrantedAuthority {
     private Integer id;
 
@@ -27,6 +25,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return null;
+        return roleName;
     }
 }

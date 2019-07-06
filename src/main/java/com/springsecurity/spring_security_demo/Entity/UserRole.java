@@ -1,8 +1,5 @@
 package com.springsecurity.spring_security_demo.Entity;
 
-import lombok.Data;
-
-@Data
 public class UserRole {
     private String userId;
 

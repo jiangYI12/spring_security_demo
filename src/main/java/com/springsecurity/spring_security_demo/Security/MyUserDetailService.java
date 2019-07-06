@@ -1,7 +1,6 @@
 package com.springsecurity.spring_security_demo.Security;
 
 import com.springsecurity.spring_security_demo.Dao.RoleMapper;
-import com.springsecurity.spring_security_demo.Dao.UserMapper;
 import com.springsecurity.spring_security_demo.Dao.UsersMapper;
 import com.springsecurity.spring_security_demo.Entity.Role;
 import com.springsecurity.spring_security_demo.Entity.Users;
@@ -28,15 +27,16 @@ public class MyUserDetailService implements UserDetailsService {
     private UsersMapper usersMapper;
     @Autowired
     private RoleMapper roleMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Users users = new Users();
         if(userName.indexOf("phones")>0){
             users.setPhone(userName.replace("phones",""));
         }else {
-            users.setUserName(userName);
+            users.setAccount(userName);
         }
         Users user = usersMapper.selectByPrimaryKeySelective(users);
         logger.info("用户账号{} 权限{}",user.getAccount());

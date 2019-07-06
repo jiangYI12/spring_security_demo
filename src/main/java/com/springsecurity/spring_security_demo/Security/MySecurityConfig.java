@@ -1,9 +1,12 @@
 package com.springsecurity.spring_security_demo.Security;
 
+import com.springsecurity.spring_security_demo.Security.Mobile.SmsCodeAuthenticationFilter;
 import com.springsecurity.spring_security_demo.Security.Mobile.SmsCodeAuthenticationSecurityConfig;
+import com.springsecurity.spring_security_demo.Security.Mobile.SmsCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -38,9 +42,13 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     AuthenctiationFailureHandler myFailureHandler;
     @Autowired
     SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+    @Autowired
+    SmsCodeFilter smsCodeFilter;
     //密码加密
-    @Bean
+    @Bean(name = "myPasswordEncoder")
+    @Scope(scopeName = "prototype")
     public PasswordEncoder passwordEncoder(){
+        System.err.println(new BCryptPasswordEncoder().encode("sdad23307216"));
         return new BCryptPasswordEncoder();
     }
     // 记住我
@@ -80,18 +88,22 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/index/welcome").hasRole("admin")
                 .antMatchers("/index/welcomeTwo").hasRole("user")
-                .antMatchers("/login").permitAll()
-                .anyRequest().authenticated()//所有路径都需要登录
+                .antMatchers("/login/*","/authentication/mobile","/login","/index/failerlogin").permitAll()
+                .anyRequest()
+                .authenticated()//所有路径都需要登录
                 .and()
 //              权限不足返回信息
                 .exceptionHandling().accessDeniedHandler(restAuthenticationAccessDeniedHandler)
                 .and()
                 .rememberMe().tokenRepository(persistentTokenRepository)//记住我数据源
-                .tokenValiditySeconds(1000)//过期秒数
+                .tokenValiditySeconds(10000)//过期秒数
                 .userDetailsService(myUserDetailService)
         //添加短信验证
                 .and()
-                .apply(smsCodeAuthenticationSecurityConfig);
+                .apply(smsCodeAuthenticationSecurityConfig)
+        //添加自定义过滤器
+                .and().addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
 
     }
 }

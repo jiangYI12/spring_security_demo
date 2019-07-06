@@ -7,10 +7,12 @@
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
+      <collection property="roles" column="id" select="com.springsecurity.spring_security_demo.Dao.RoleMapper.select_user_role" ></collection>
   </resultMap>
   <sql id="Base_Column_List">
     id, user_name, account, password, phone
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -82,23 +84,24 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="selectByPrimaryKeySelective" parameterType="com.springsecurity.spring_security_demo.Entity.Users">
-    SELECT <include refid="Base_Column_List"></include> FROM users WHERE
-    <set>
-      <if test="userName != null">
-        AND user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="account != null">
-        AND account = #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        AND password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        AND phone = #{phone,jdbcType=VARCHAR},
-      </if>
-    </set>
+  <select id="selectByPrimaryKeySelective" resultMap="BaseResultMap" parameterType="com.springsecurity.spring_security_demo.Entity.Users">
+    SELECT <include refid="Base_Column_List"></include> FROM users
+    <where>
+    <if test="userName != null">
+      AND user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <if test="account != null">
+      AND account = #{account,jdbcType=VARCHAR}
+    </if>
+    <if test="password != null">
+      AND password = #{password,jdbcType=VARCHAR}
+    </if>
+    <if test="phone != null">
+      AND phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    </where>
   </select>
+
   <update id="updateByPrimaryKey" parameterType="com.springsecurity.spring_security_demo.Entity.Users">
     update users
     set user_name = #{userName,jdbcType=VARCHAR},
