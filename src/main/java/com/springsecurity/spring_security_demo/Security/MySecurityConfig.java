@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -30,8 +31,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyUserDetailService myUserDetailService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Resource(name = "myPasswordEncoder")
+    private PasswordEncoder myPasswordEncoder;
     @Autowired
     RestAuthenticationAccessDeniedHandler restAuthenticationAccessDeniedHandler;
     @Autowired
@@ -44,9 +45,11 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
     @Autowired
     SmsCodeFilter smsCodeFilter;
+    @Autowired
+    SpringSocialConfigurer socialSecurityConfig;
     //密码加密
     @Bean(name = "myPasswordEncoder")
-    @Scope(scopeName = "prototype")
+    @Scope("prototype")
     public PasswordEncoder passwordEncoder(){
         System.err.println(new BCryptPasswordEncoder().encode("sdad23307216"));
         return new BCryptPasswordEncoder();
@@ -64,7 +67,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(myUserDetailService).passwordEncoder(myPasswordEncoder);
     }
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -88,7 +91,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/index/welcome").hasRole("admin")
                 .antMatchers("/index/welcomeTwo").hasRole("user")
-                .antMatchers("/login/*","/authentication/mobile","/login","/index/failerlogin").permitAll()
+                .antMatchers("/login/*","/authentication/mobile","/login","/index/failerlogin","/index/qqLogin","/user/*").permitAll()
                 .anyRequest()
                 .authenticated()//所有路径都需要登录
                 .and()
@@ -99,6 +102,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(10000)//过期秒数
                 .userDetailsService(myUserDetailService)
         //添加短信验证
+                .and()
+        //添加第三方登录路径拦截
+                .apply(socialSecurityConfig)
                 .and()
                 .apply(smsCodeAuthenticationSecurityConfig)
         //添加自定义过滤器

@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.security.SocialUserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Data
-public class Users implements UserDetails{
+public class Users implements UserDetails,SocialUserDetails {
 
     private String id;
 
@@ -71,5 +72,11 @@ public class Users implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    @Override
+    public String getUserId() {
+        return account;
     }
 }

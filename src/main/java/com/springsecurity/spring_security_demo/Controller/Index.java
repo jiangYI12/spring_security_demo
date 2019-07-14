@@ -26,4 +26,10 @@ public class Index {
     public String failerlogin(){
         return "登录失败跳转页面";
     }
+
+    @RequestMapping("/qqLogin")
+    public String qqLogin(){
+        return "qqLogin ";
+    }
+
 }
