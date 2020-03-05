@@ -53,6 +53,7 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
     // ~ Methods
     // ========================================================================================================
 
+    //密码
     @Override
     public Object getCredentials() {
         return null;

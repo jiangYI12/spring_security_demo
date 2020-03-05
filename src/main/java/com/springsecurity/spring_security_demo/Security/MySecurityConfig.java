@@ -106,6 +106,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         //添加第三方登录路径拦截
                 .apply(socialSecurityConfig)
                 .and()
+        //添加短信登录配置
                 .apply(smsCodeAuthenticationSecurityConfig)
         //添加自定义过滤器
                 .and().addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)

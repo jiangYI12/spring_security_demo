@@ -6,6 +6,7 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import java.util.Set;
 
 public class MyConnectionFactoryLocator implements ConnectionFactoryLocator {
+
     @Override
     public ConnectionFactory<?> getConnectionFactory(String s) {
         return null;

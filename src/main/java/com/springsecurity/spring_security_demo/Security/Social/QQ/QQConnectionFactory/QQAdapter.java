@@ -5,6 +5,7 @@ import com.springsecurity.spring_security_demo.Security.Social.QQ.User.QQUserInf
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
+
 //编写QQ API适配器，将从QQ API拿到的用户数据模型转换为Spring Social的标准用户数据模型
 //构建ApiAdapter
 //QQ Api类型
